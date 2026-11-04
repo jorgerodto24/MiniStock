@@ -1,53 +1,36 @@
-MiniStock 
+# MiniStock
 
-Aplicación de gestión de inventario desarrollada en Java como proyecto personal de aprendizaje.
+Aplicación de gestión de inventario desarrollada en **Java 21** como proyecto personal para practicar programación orientada a objetos, gestión de archivos y buenas prácticas de desarrollo.
 
-Descripción
+## Descripción
 
-MiniStock permite gestionar los productos de un inventario desde una aplicación de consola.
+MiniStock permite gestionar el inventario de una pequeña tienda desde una aplicación de consola. El usuario puede registrar productos, consultar existencias, modificar precios y controlar el valor total del inventario.
 
-El proyecto se está desarrollando progresivamente para practicar programación orientada a objetos, gestión de archivos, validación de datos y buenas prácticas de programación en Java.
+## Funcionalidades
 
-Funcionalidades
+- Mostrar todos los productos.
+- Buscar productos por nombre.
+- Registrar nuevos productos.
+- Eliminar productos del inventario.
+- Actualizar precios y cantidades.
+- Consultar productos con poco stock.
+- Calcular el valor total del inventario.
+- Guardar los productos en un archivo de texto.
+- Cargar automáticamente los productos al iniciar la aplicación.
+- Validar los datos introducidos por el usuario y gestionar errores de lectura.
 
-Mostrar todos los productos.
+## Tecnologías utilizadas
 
-Buscar productos por nombre.
+- Java 21
+- IntelliJ IDEA
+- Git y GitHub
+- ArrayList
+- Programación orientada a objetos
+- Lectura y escritura de archivos (`FileReader`, `FileWriter`, `BufferedReader`)
 
-Añadir productos.
+## Estructura del proyecto
 
-Eliminar productos.
-
-Actualizar precios.
-
-Actualizar cantidades de stock.
-
-Consultar productos con bajo stock.
-
-Calcular el valor total del inventario.
-
-Guardar y cargar productos desde un archivo de texto.
-
-Validar entradas y controlar errores durante la lectura de archivos.
-
-Tecnologías utilizadas
-
-Java 21
-
-IntelliJ IDEA
-
-Git
-
-GitHub
-
-ArrayList
-
-FileReader y FileWriter
-
-BufferedReader
-
-Estructura del proyecto
-
+```text
 MiniStock/
 ├── src/
 │   ├── Main.java
@@ -55,13 +38,25 @@ MiniStock/
 │   └── Producto.java
 ├── .gitignore
 └── README.md
+```
 
-Estado del proyecto
+## Cómo ejecutar el proyecto
 
-En desarrollo.
+Es necesario tener instalado **JDK 21**.
 
-Este proyecto forma parte de mi aprendizaje de Java y programación Backend. El objetivo es evolucionarlo progresivamente hacia una aplicación con base de datos PostgreSQL y una API REST desarrollada con Spring Boot.
+Desde la carpeta raíz del proyecto, ejecuta:
 
-Autor
+```bash
+javac -d out src/*.java
+java -cp out Main
+```
 
-Proyecto personal de aprendizaje desarrollado en Java.
+## Estado del proyecto
+
+Proyecto en desarrollo.
+
+Como siguientes pasos, se plantea ampliar la aplicación incorporando una base de datos PostgreSQL y desarrollando una API REST con Spring Boot.
+
+## Autor
+
+Proyecto personal desarrollado como parte de mi aprendizaje de Java.
