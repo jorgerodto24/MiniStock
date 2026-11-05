@@ -1,82 +1,81 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
+import java.util.*;
 
 public class Main {
 
+
+
     public static void main(String[] args) {
+
 
         Scanner scanner = new Scanner(System.in);
         Inventario inventario = new Inventario();
 
         boolean continuar = true;
 
-        while (continuar) {
+            while (continuar) {
 
-            mostrarMenu();
+                mostrarMenu();
 
 
-            if (scanner.hasNextInt()) {
-                int opcion = scanner.nextInt();
-                scanner.nextLine();
-                switch (opcion) {
+                if (scanner.hasNextInt()) {
+                    int opcion = scanner.nextInt();
+                    scanner.nextLine();
+                    switch (opcion) {
 
-                    case 1:
-                        mostrarProductos(inventario.getProductos());
-                        break;
+                        case 1:
+                            mostrarProductos(inventario.getProductos());
+                            break;
 
-                    case 2:
-                        buscarProductoMenu(inventario, scanner);
-                        break;
+                        case 2:
+                            buscarProductoMenu(inventario, scanner);
+                            break;
 
-                    case 3:
-                        registrarProducto(inventario, scanner);
-                        break;
+                        case 3:
+                            registrarProducto(inventario, scanner);
+                            break;
 
-                    case 4:
-                        eliminarProductoMenu(inventario, scanner);
-                        break;
+                        case 4:
+                            eliminarProductoMenu(inventario, scanner);
+                            break;
 
-                    case 5:
-                        inventario.guardarProductos();
-                        continuar = false;
-                        break;
+                        case 5:
+                            inventario.guardarProductos();
+                            continuar = false;
+                            break;
 
-                    case 6:
-                        System.out.println("Actualmente hay " + inventario.getProductos().size() + " productos.");
-                        break;
+                        case 6:
+                            System.out.println("Actualmente hay " + inventario.getProductos().size() + " productos.");
+                            break;
 
-                    case 7:
-                        actualizarStockMenu(inventario, scanner);
-                        break;
+                        case 7:
+                            actualizarStockMenu(inventario, scanner);
+                            break;
 
-                    case 8:
-                        actualizarPrecioMenu(inventario, scanner);
-                        break;
-                    case 9:
-                        inventario.guardarProductos();
-                        break;
-                    case 10:
-                        inventario.mostrarStockBajo();
-                        break;
+                        case 8:
+                            actualizarPrecioMenu(inventario, scanner);
+                            break;
+                        case 9:
+                            inventario.guardarProductos();
+                            break;
+                        case 10:
+                            inventario.mostrarStockBajo();
+                            break;
 
-                    case 11:
-                        inventario.calcularValorInventario();
-                        break;
+                        case 11:
+                            inventario.calcularValorInventario();
+                            break;
 
-                    default:
-                        System.out.println("Opción no válida.");
+                        default:
+                            System.out.println("Opción no válida.");
+                    }
+
+                } else {
+                    System.out.println("No es una opción válida.");
+                    scanner.nextLine();
                 }
-
-            } else {
-                System.out.println("No es una opción válida.");
-                scanner.nextLine();
             }
+            scanner.close();
         }
-        scanner.close();
-    }
 
     public static void mostrarMenu() {
         System.out.println("\n===== GESTOR DE PRODUCTOS =====");
@@ -94,15 +93,22 @@ public class Main {
         System.out.print("Selecciona una opción: ");
     }
 
-    public static void mostrarProductos(ArrayList<Producto> productos) {
-        for (Producto producto : productos) {
+    public static void mostrarProductos(Map<String, Producto> productos) {
+        for (Producto producto : productos.values()) {
             System.out.println(producto);
         }
     }
 
     public static void registrarProducto(Inventario inventario, Scanner scanner) {
         int cantidad;
-        double precio = 0;
+        double precio;
+
+        System.out.print("Introduce el codigo del producto: ");
+        String codigo = scanner.nextLine();
+        while (codigo.isBlank()) {
+            System.out.print("Introduce el codigo del producto correctamente: ");
+            codigo = scanner.nextLine();
+        }
 
         System.out.print("Introduce el nombre del producto: ");
         String producto = scanner.nextLine();
@@ -111,7 +117,7 @@ public class Main {
             producto = scanner.nextLine();
         }
 
-        if (inventario.buscarProducto(producto)) {
+        if (inventario.buscarProducto(codigo)) {
             System.out.println("Ese producto ya existe.");
             return;
         }
@@ -150,15 +156,20 @@ public class Main {
             }
         }
         scanner.nextLine();
-        Producto nuevoProducto = new Producto(producto, precio, cantidad);
-        inventario.añadirProducto(nuevoProducto);
-        System.out.println("Producto añadido correctamente");
+        Producto nuevoProducto = new Producto(codigo, producto, precio, cantidad);
+        boolean añadido = inventario.añadirProducto(nuevoProducto);
+
+        if (añadido) {
+            System.out.println("Producto añadido correctamente");
+        } else {
+            System.out.println("Ya existe un producto con ese código");
+        }
     }
 
     public static void eliminarProductoMenu(Inventario inventario, Scanner scanner) {
-        System.out.println("Introduce el nombre del producto");
-        String producto = scanner.nextLine();
-        boolean eliminado = inventario.eliminarProducto(producto);
+        System.out.println("Introduce el codigo del producto");
+        String codigo = scanner.nextLine();
+        boolean eliminado = inventario.eliminarProducto(codigo);
         if (eliminado) {
             System.out.println("Producto eliminado correctamente");
         } else {
@@ -169,12 +180,13 @@ public class Main {
     public static void actualizarStockMenu(Inventario inventario, Scanner scanner) {
         int cantidad;
 
-        System.out.println("Introduce el nombre del producto");
-        String producto = scanner.nextLine();
-        while (producto.isBlank()) {
-            System.out.print("Introduce el nombre del producto correctamente: ");
-            producto = scanner.nextLine();
+        System.out.println("Introduce el codigo del producto");
+        String codigo = scanner.nextLine();
+        while (codigo.isBlank()) {
+            System.out.print("Introduce el codigo del producto correctamente: ");
+            codigo = scanner.nextLine();
         }
+
         while (true) {
             System.out.println("Introduce la cantidad");
             if (scanner.hasNextInt()) {
@@ -191,19 +203,18 @@ public class Main {
             }
         }
         scanner.nextLine();
-        boolean actualizado = inventario.actualizarProducto(producto, cantidad);
-        if (actualizado) {
-            System.out.println("El stock ha sido actualizado");
-        } else {
+        if (!inventario.actualizarProducto(codigo, cantidad)) {
             System.out.println("El producto no existe");
+            return;
         }
 
+        System.out.println("El stock ha sido actualizado");
     }
 
     public static void buscarProductoMenu(Inventario inventario, Scanner scanner) {
-        System.out.println("Introduce el nombre del producto");
-        String producto = scanner.nextLine();
-        boolean encontrado = inventario.buscarProducto(producto);
+        System.out.println("Introduce el codigo del producto");
+        String codigo = scanner.nextLine();
+        boolean encontrado = inventario.buscarProducto(codigo);
         if (encontrado) {
             System.out.println("El producto existe");
         } else {
@@ -214,16 +225,12 @@ public class Main {
     public static void actualizarPrecioMenu(Inventario inventario, Scanner scanner) {
         double precio;
 
-        System.out.println("Introduce el nombre del producto");
-        String producto = scanner.nextLine();
-        if (!inventario.buscarProducto(producto)) {
-            System.out.println("El producto no existe");
-            return;
-        }
+        System.out.println("Introduce el codigo del producto");
+        String codigo = scanner.nextLine();
 
-        while (producto.isBlank()) {
-            System.out.print("Introduce el nombre del producto correctamente: ");
-            producto = scanner.nextLine();
+        while (codigo.isBlank()) {
+            System.out.print("Introduce el codigo del producto correctamente: ");
+            codigo = scanner.nextLine();
         }
 
         while (true) {
@@ -242,13 +249,11 @@ public class Main {
             }
         }
         scanner.nextLine();
-        boolean actualizado = inventario.actualizarPrecio(producto, precio);
-        if (actualizado) {
-            System.out.println("El precio ha sido actualizado");
-        } else {
+        if (!inventario.actualizarPrecio(codigo, precio)) {
             System.out.println("El producto no existe");
+            return;
         }
 
+        System.out.println("El precio ha sido actualizado");
     }
-
 }
